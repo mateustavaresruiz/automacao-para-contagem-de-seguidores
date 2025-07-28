@@ -1,0 +1,774 @@
+{
+  "name": "Controle Seguidores",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1664,
+        608
+      ],
+      "id": "dbd32094-6f01-489c-acae-ca51a6c0187d",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1088,
+        608
+      ],
+      "id": "1013c15b-62f0-437c-93ad-14d8cdf6de04",
+      "name": "Espera",
+      "webhookId": "827e87b7-6f3a-434d-bfa7-557bc921720f"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Url }}",
+                    "rightValue": "https://www.youtube.com/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "b87227b9-3ddd-45c9-9ed6-435d9fa71bab"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a7f376ed-a525-4ddc-98ed-b5216fa26b66",
+                    "leftValue": "={{ $json.Url }}",
+                    "rightValue": "https://www.instagram.com/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c558d057-6521-48a6-97b3-c9df70b631c9",
+                    "leftValue": "={{ $json.Url }}",
+                    "rightValue": "https://twitchtracker.com/",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -896,
+        608
+      ],
+      "id": "a151a6f2-7e1d-4fa9-9ac9-fbb7cc0972e4",
+      "name": "Distribuição"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.Url }}",
+        "options": {
+          "timeout": 100000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -608,
+        800
+      ],
+      "id": "47e93bb9-e07f-4aed-843d-f064eafd8862",
+      "name": "Coleta Twitch"
+    },
+    {
+      "parameters": {
+        "url": "https://fanhub.pro/tucktools_user",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "username",
+              "value": "={{ $json.ID }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "*/*"
+            },
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip, deflate, br, zstd"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7"
+            },
+            {
+              "name": "Origin",
+              "value": "https://www.tucktools.com"
+            },
+            {
+              "name": "Referer",
+              "value": "https://www.tucktools.com/"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -608,
+        608
+      ],
+      "id": "7c9fe38c-d3eb-434a-a05c-2d9c7fa3bd4c",
+      "name": "Coleta Instagram"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "channelId": "={{ $json.ID }}",
+        "part": [
+          "statistics"
+        ]
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        400
+      ],
+      "id": "42648a8f-953a-4044-86d3-098f177222a5",
+      "name": "Coleta YouTube",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "DUQaNucnNJyaeV8V",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1u1SL5P-DWc613ojFdmynywCjzVoQgWWdPPUCXrFb_JE",
+          "mode": "list",
+          "cachedResultName": "Clientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u1SL5P-DWc613ojFdmynywCjzVoQgWWdPPUCXrFb_JE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Folha1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u1SL5P-DWc613ojFdmynywCjzVoQgWWdPPUCXrFb_JE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -1456,
+        608
+      ],
+      "id": "51f75963-5025-49d5-a447-c32c9d549767",
+      "name": "Base de Dados",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xlL5EG2LIcuEHD1s",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1u1SL5P-DWc613ojFdmynywCjzVoQgWWdPPUCXrFb_JE",
+          "mode": "list",
+          "cachedResultName": "Clientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u1SL5P-DWc613ojFdmynywCjzVoQgWWdPPUCXrFb_JE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Folha1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u1SL5P-DWc613ojFdmynywCjzVoQgWWdPPUCXrFb_JE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Seguidores": "={{ $json.Twitch }}",
+            "Canal": "={{ $('Base de Dados').item.json.Canal }}"
+          },
+          "matchingColumns": [
+            "Canal"
+          ],
+          "schema": [
+            {
+              "id": "Canal",
+              "displayName": "Canal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Url",
+              "displayName": "Url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seguidores",
+              "displayName": "Seguidores",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        0,
+        368
+      ],
+      "id": "f3dc15e8-fbee-4076-b108-6cc9569f9b2e",
+      "name": "Adicionar Twitch",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xlL5EG2LIcuEHD1s",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1u1SL5P-DWc613ojFdmynywCjzVoQgWWdPPUCXrFb_JE",
+          "mode": "list",
+          "cachedResultName": "Clientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u1SL5P-DWc613ojFdmynywCjzVoQgWWdPPUCXrFb_JE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Folha1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u1SL5P-DWc613ojFdmynywCjzVoQgWWdPPUCXrFb_JE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Seguidores": "={{ $json.Instagram }}",
+            "Canal": "={{ $('Base de Dados').item.json.Canal }}"
+          },
+          "matchingColumns": [
+            "Canal"
+          ],
+          "schema": [
+            {
+              "id": "Canal",
+              "displayName": "Canal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Url",
+              "displayName": "Url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seguidores",
+              "displayName": "Seguidores",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        0,
+        192
+      ],
+      "id": "16e2128c-e88d-4b8c-978d-ff8b331b3936",
+      "name": "Adicionar Instagram",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xlL5EG2LIcuEHD1s",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1u1SL5P-DWc613ojFdmynywCjzVoQgWWdPPUCXrFb_JE",
+          "mode": "list",
+          "cachedResultName": "Clientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u1SL5P-DWc613ojFdmynywCjzVoQgWWdPPUCXrFb_JE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Folha1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u1SL5P-DWc613ojFdmynywCjzVoQgWWdPPUCXrFb_JE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Seguidores": "={{ $json.Youtube }}",
+            "Canal": "={{ $('Base de Dados').item.json.Canal }}"
+          },
+          "matchingColumns": [
+            "Canal"
+          ],
+          "schema": [
+            {
+              "id": "Canal",
+              "displayName": "Canal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Url",
+              "displayName": "Url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seguidores",
+              "displayName": "Seguidores",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        0,
+        0
+      ],
+      "id": "187d1bc9-c9d1-4284-9bf7-dfa7a8325967",
+      "name": "Adicionar Youtube",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "xlL5EG2LIcuEHD1s",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        -48,
+        608
+      ],
+      "id": "bba23dad-661e-45b0-b696-fa10a03981e0",
+      "name": "Unificar Dados"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4291b35c-1429-4d75-b4b1-db7053bb449f",
+              "name": "Youtube",
+              "value": "={{ $json.statistics.subscriberCount }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -384,
+        400
+      ],
+      "id": "6ca51a15-6cae-4105-b0b4-be31fa7a5454",
+      "name": "Edição Youtube"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4291b35c-1429-4d75-b4b1-db7053bb449f",
+              "name": "Instagram",
+              "value": "={{ $json.user_followers }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -384,
+        608
+      ],
+      "id": "acfb4eb7-4b6a-4034-b040-d7c00d101d1d",
+      "name": "Edição Instagram"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "=Twitch",
+              "cssSelector": "#content-wrapper > div:nth-child(5) > div > div.g-x-l.g-x-l-4 > div:nth-child(3) > div.g-x-s-value > span:nth-child(2)"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -384,
+        800
+      ],
+      "id": "a9b98352-f9da-42e5-8b78-ad061d1cb8b1",
+      "name": "Extração HTML"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1280,
+        608
+      ],
+      "id": "fafb4f85-9065-4705-a63d-ab68a853c9ed",
+      "name": "Contador de Itens e Separador"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Base de Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Espera": {
+      "main": [
+        [
+          {
+            "node": "Distribuição",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Distribuição": {
+      "main": [
+        [
+          {
+            "node": "Coleta YouTube",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Coleta Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Coleta Twitch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Coleta Twitch": {
+      "main": [
+        [
+          {
+            "node": "Extração HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Coleta Instagram": {
+      "main": [
+        [
+          {
+            "node": "Edição Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Coleta YouTube": {
+      "main": [
+        [
+          {
+            "node": "Edição Youtube",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Base de Dados": {
+      "main": [
+        [
+          {
+            "node": "Contador de Itens e Separador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unificar Dados": {
+      "main": [
+        [
+          {
+            "node": "Contador de Itens e Separador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edição Youtube": {
+      "main": [
+        [
+          {
+            "node": "Adicionar Youtube",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Unificar Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edição Instagram": {
+      "main": [
+        [
+          {
+            "node": "Unificar Dados",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Adicionar Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extração HTML": {
+      "main": [
+        [
+          {
+            "node": "Unificar Dados",
+            "type": "main",
+            "index": 2
+          },
+          {
+            "node": "Adicionar Twitch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contador de Itens e Separador": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Espera",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c8f2d7e5-7225-4ca2-a237-c733300fd19c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7f149b3d554ee78130c1560da231cbc10d81008119631e93e066a86fb24d77a2"
+  },
+  "id": "kZ8s9pLXrtFAfpZ4",
+  "tags": []
+}
