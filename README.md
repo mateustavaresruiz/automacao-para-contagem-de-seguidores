@@ -2,6 +2,9 @@ Documentação do Fluxo n8n: Controle de Seguidores
 Visão Geral
 Este fluxo do n8n foi projetado para coletar e atualizar a contagem de seguidores de perfis em diversas redes sociais (YouTube, Instagram e Twitch) e registrar esses dados em uma planilha do Google Sheets. O objetivo principal é automatizar o scraping e facilitar o monitoramento e a atualização das informações de seguidores.
 
+<img width="1122" height="606" alt="image" src="https://github.com/user-attachments/assets/8468a7f5-874a-4937-84ea-47bc0370af38" />
+
+
 Como Funciona
 O fluxo opera da seguinte forma:
 
